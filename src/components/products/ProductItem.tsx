@@ -8,9 +8,12 @@ const ProductItem = ({
   sales_price,
   original_price,
 }: Product) => {
+  const onErrorImage = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    e.currentTarget.src = "noImage.svg";
+  };
   return (
     <div>
-      <Image src={image} alt={name} />
+      <Image src={image} alt={name} onError={onErrorImage} />
       <p>{name}</p>
       <p>{brand}</p>
       <p>
@@ -28,5 +31,6 @@ const ProductItem = ({
 
 const Image = styled.img`
   width: 100%;
+  aspect-ratio: 1;
 `;
 export default ProductItem;
