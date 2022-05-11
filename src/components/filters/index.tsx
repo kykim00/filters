@@ -24,7 +24,7 @@ const Filters = () => {
 
 const FiltersContainer = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   position: relative;
 `;
 export default Filters;
