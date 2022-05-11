@@ -1,11 +1,12 @@
-import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
+import { useRecoilValue } from "recoil";
+import Filters from "../components/filters";
 import ProductList from "../components/products/ProductList";
-import { Products, QueryParams } from "../types";
 import { getProductList } from "../utils/api";
+import { paramState } from "../atoms";
 
 const MainPage = () => {
-  const [params, setParams] = useState<QueryParams>({});
+  const params = useRecoilValue(paramState);
 
   const { data } = useQuery(["products", params], () => getProductList(params));
 
@@ -14,6 +15,7 @@ const MainPage = () => {
   return (
     <div>
       <h1>Hello World</h1>
+      <Filters />
       <ProductList list={data.products} />
     </div>
   );
