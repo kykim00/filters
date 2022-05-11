@@ -16,6 +16,7 @@ const MainPage = () => {
   const pageStep = Math.floor((currentPage - 1) / 10) * 10;
   const lastPage = Math.ceil(data.total / 20);
 
+  const isLastGroup = Math.ceil(currentPage / 10) === Math.ceil(lastPage / 10);
   const handlePageChange = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
@@ -45,14 +46,16 @@ const MainPage = () => {
     });
   };
   const handleGoToNextPage = () => {
+    if (currentPage === lastPage) return;
     setParams({
       ...params,
       page: currentPage + 1,
     });
   };
+  console.log(currentPage, lastPage, isLastGroup);
   return (
     <div>
-      <h1>Hello World</h1>
+      <h1>Products</h1>
       <Filters />
       <ProductList list={data.products} />
       <PageContainer>
@@ -62,16 +65,20 @@ const MainPage = () => {
         <li>
           <button onClick={handleGoToPrevPage}>{`<`}</button>
         </li>
-        {new Array(10).fill("").map((item, index) => (
-          <li key={index}>
-            <PageButton
-              onClick={handlePageChange}
-              isCurrentPage={index + 1 + pageStep === currentPage}
-            >
-              {index + 1 + pageStep}
-            </PageButton>
-          </li>
-        ))}
+        {new Array(
+          isLastGroup ? lastPage - Math.floor(currentPage / 10) * 10 : 10
+        )
+          .fill("")
+          .map((item, index) => (
+            <li key={index}>
+              <PageButton
+                onClick={handlePageChange}
+                isCurrentPage={index + 1 + pageStep === currentPage}
+              >
+                {index + 1 + pageStep}
+              </PageButton>
+            </li>
+          ))}
         <li>
           <button onClick={handleGoToNextPage}>{`>`}</button>
         </li>
