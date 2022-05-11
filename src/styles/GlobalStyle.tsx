@@ -1,6 +1,9 @@
 import { css } from "@emotion/react";
 
 const GlobalStyle = css`
+  ul {
+    padding: 0;
+  }
   li {
     list-style: none;
     &:hover {
