@@ -1,6 +1,5 @@
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import { paramState } from "../../atoms";
 import { Brands, Colors } from "../../types";
+import useFilter from "../../hooks/useFilter";
 
 interface FilterItemListProps {
   list: Brands | Colors;
@@ -8,19 +7,20 @@ interface FilterItemListProps {
 }
 
 const FilterItemList = ({ list, filterName }: FilterItemListProps) => {
-  const params = useRecoilValue(paramState);
-  const setParams = useSetRecoilState(paramState);
-
+  const { params, setParams, setSelectedFilter } = useFilter();
   const handleClick = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
     setParams({
       ...params,
       [filterName]: e.currentTarget.textContent,
     });
+    setSelectedFilter("");
   };
   return (
     <ul>
       {list.map((item) => (
-        <li onClick={handleClick}>{item.name}</li>
+        <li onClick={handleClick} key={item.name}>
+          {item.name}
+        </li>
       ))}
     </ul>
   );

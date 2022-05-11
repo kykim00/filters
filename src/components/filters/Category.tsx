@@ -1,23 +1,30 @@
 import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import { paramState } from "../../atoms";
 import { Categories } from "../../types";
 import { getCategoryList } from "../../utils/api";
+import useFilter from "../../hooks/useFilter";
 
 const CategoryFilter = () => {
   const [sortedData, setSortedData] = useState<Categories>([]);
   const { data } = useQuery("categories", () => getCategoryList());
 
-  const params = useRecoilValue(paramState);
-  const setParams = useSetRecoilState(paramState);
+  const {
+    params,
+    setParams,
+    selectedFilter,
+    setSelectedFilter,
+    onClickFilterMenu,
+  } = useFilter();
 
-  const handleClick = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+  const handleFilterItemClick = (
+    e: React.MouseEvent<HTMLElement, MouseEvent>
+  ) => {
     setParams({
       ...params,
       categoryId: +e.currentTarget.id,
     });
+    setSelectedFilter("");
   };
 
   useEffect(() => {
@@ -31,19 +38,23 @@ const CategoryFilter = () => {
   if (!data) return null;
   return (
     <div>
-      <p>Category</p>
-      <ul>
-        {sortedData.map((item) => (
-          <CategoryItem
-            key={item.id}
-            isParent={item.id < 4}
-            id={item.id + ""}
-            onClick={handleClick}
-          >
-            {item.name}
-          </CategoryItem>
-        ))}
-      </ul>
+      <h3>
+        <button onClick={onClickFilterMenu}>Category</button>
+      </h3>
+      {selectedFilter === "Category" && (
+        <ul>
+          {sortedData.map((item) => (
+            <CategoryItem
+              key={item.id}
+              isParent={item.id < 4}
+              id={item.id + ""}
+              onClick={handleFilterItemClick}
+            >
+              {item.name}
+            </CategoryItem>
+          ))}
+        </ul>
+      )}
     </div>
   );
 };
